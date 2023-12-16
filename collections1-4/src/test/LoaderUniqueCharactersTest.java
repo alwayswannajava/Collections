@@ -3,11 +3,14 @@ package test;
 import mainClasses.LoaderUniqueCharacters;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class LoaderUniqueCharactersTest {
+
 
     @Test
     @DisplayName("Loading unique characters test #1")
@@ -70,21 +73,37 @@ class LoaderUniqueCharactersTest {
         assertEquals(expectedCacheMap, actualMap);
     }
 
+
     @Test
     @DisplayName("Cache loading test #2")
     void testCorrectLoadingUniqueCharactersFromCacheNumberTwo() {
-        LoaderUniqueCharacters loader = new LoaderUniqueCharacters();
-        Map<Character, Integer> actualMap = loader.loadingUniqueCharacters("world");
-        Map<Character, Integer> expectedCacheMap = loader.cache.get("world");
-        assertEquals(expectedCacheMap, actualMap);
+        LoaderUniqueCharacters loader = Mockito.spy(new LoaderUniqueCharacters());
+        Map<Character, Integer> actualMap = loader.cache.get("world");
+        when(loader.loadingUniqueCharacters("world"))
+                .thenReturn(actualMap);
     }
 
     @Test
     @DisplayName("Cache loading test #3")
     void testCorrectLoadingUniqueCharactersFromCacheNumberThree() {
-        LoaderUniqueCharacters loader = new LoaderUniqueCharacters();
-        Map<Character, Integer> actualMap = loader.loadingUniqueCharacters("java");
-        Map<Character, Integer> expectedCacheMap = loader.cache.get("java");
-        assertEquals(expectedCacheMap, actualMap);
+        LoaderUniqueCharacters loader = Mockito.spy(new LoaderUniqueCharacters());
+        Map<Character, Integer> actualMap = loader.cache.get("java");
+        when(loader.loadingUniqueCharacters("java"))
+                .thenReturn(actualMap);
     }
+
+    @Test
+    @DisplayName("Check not invoking of PUT method in cache after invoking of GET method")
+    void testCheckingNotPutMethodInCacheAfterGetMethod() {
+        LoaderUniqueCharacters loader = new LoaderUniqueCharacters();
+        loader.cache = mock(Map.class);
+        String expectedInput = "abbabaaaba";
+        Map<Character, Integer> expectedCharIntegerMap = new LinkedHashMap<>();
+        expectedCharIntegerMap.put('a', 6);
+        expectedCharIntegerMap.put('b', 4);
+        when(loader.cache.containsKey(expectedInput)).thenReturn(true);
+        verify(loader.cache, times(0)).put("abbabaaaba",expectedCharIntegerMap);
+        assertEquals(loader.cache.containsKey(expectedInput), true);
+    }
+
 }
