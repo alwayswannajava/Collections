@@ -81,6 +81,7 @@ class LoaderUniqueCharactersTest {
         Map<Character, Integer> actualMap = loader.cache.get("world");
         when(loader.loadingUniqueCharacters("world"))
                 .thenReturn(actualMap);
+        assertEquals(loader.loadingUniqueCharacters("world"), actualMap);
     }
 
     @Test
@@ -90,6 +91,7 @@ class LoaderUniqueCharactersTest {
         Map<Character, Integer> actualMap = loader.cache.get("java");
         when(loader.loadingUniqueCharacters("java"))
                 .thenReturn(actualMap);
+        assertEquals(loader.loadingUniqueCharacters("java"), actualMap);
     }
 
     @Test
@@ -103,7 +105,20 @@ class LoaderUniqueCharactersTest {
         expectedCharIntegerMap.put('b', 4);
         when(loader.cache.containsKey(expectedInput)).thenReturn(true);
         verify(loader.cache, times(0)).put("abbabaaaba",expectedCharIntegerMap);
-        assertEquals(loader.cache.containsKey(expectedInput), true);
+    }
+
+    @Test
+    @DisplayName("Check invoking of PUT method in cache after not found by GET method")
+    void testCheckInvokingOfPutMethodAfterNotFoundByGetMethod() {
+        LoaderUniqueCharacters loader = new LoaderUniqueCharacters();
+        loader.cache = mock(Map.class);
+        String expectedInput = "abbabaaaba";
+        Map<Character, Integer> expectedCharIntegerMap = new LinkedHashMap<>();
+        expectedCharIntegerMap.put('a', 6);
+        expectedCharIntegerMap.put('b', 4);
+        when(!loader.cache.containsKey(expectedInput)).thenReturn(false);
+        loader.cache.put("abbabaaaba", expectedCharIntegerMap);
+        verify(loader.cache, times(1)).put("abbabaaaba",expectedCharIntegerMap);
     }
 
 }
