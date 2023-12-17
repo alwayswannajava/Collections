@@ -73,25 +73,22 @@ class LoaderUniqueCharactersTest {
         assertEquals(expectedCacheMap, actualMap);
     }
 
-
     @Test
     @DisplayName("Cache loading test #2")
     void testCorrectLoadingUniqueCharactersFromCacheNumberTwo() {
-        LoaderUniqueCharacters loader = Mockito.spy(new LoaderUniqueCharacters());
-        Map<Character, Integer> actualMap = loader.cache.get("world");
-        when(loader.loadingUniqueCharacters("world"))
-                .thenReturn(actualMap);
-        assertEquals(loader.loadingUniqueCharacters("world"), actualMap);
+        LoaderUniqueCharacters loader = new LoaderUniqueCharacters();
+        Map<Character, Integer> actualMap = loader.loadingUniqueCharacters("world");
+        Map<Character, Integer> expectedCacheMap = loader.cache.get("world");
+        assertEquals(expectedCacheMap, actualMap);
     }
 
     @Test
     @DisplayName("Cache loading test #3")
     void testCorrectLoadingUniqueCharactersFromCacheNumberThree() {
-        LoaderUniqueCharacters loader = Mockito.spy(new LoaderUniqueCharacters());
-        Map<Character, Integer> actualMap = loader.cache.get("java");
-        when(loader.loadingUniqueCharacters("java"))
-                .thenReturn(actualMap);
-        assertEquals(loader.loadingUniqueCharacters("java"), actualMap);
+        LoaderUniqueCharacters loader = new LoaderUniqueCharacters();
+        Map<Character, Integer> actualMap = loader.loadingUniqueCharacters("java");
+        Map<Character, Integer> expectedCacheMap = loader.cache.get("java");
+        assertEquals(expectedCacheMap, actualMap);
     }
 
     @Test
@@ -104,6 +101,7 @@ class LoaderUniqueCharactersTest {
         expectedCharIntegerMap.put('a', 6);
         expectedCharIntegerMap.put('b', 4);
         when(loader.cache.containsKey(expectedInput)).thenReturn(true);
+        loader.loadingUniqueCharacters("abbabaaaba");
         verify(loader.cache, times(0)).put("abbabaaaba",expectedCharIntegerMap);
     }
 
