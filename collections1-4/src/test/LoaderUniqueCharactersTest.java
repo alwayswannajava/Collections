@@ -115,7 +115,7 @@ class LoaderUniqueCharactersTest {
         expectedCharIntegerMap.put('a', 6);
         expectedCharIntegerMap.put('b', 4);
         when(!loader.cache.containsKey(expectedInput)).thenReturn(false);
-        loader.cache.put("abbabaaaba", expectedCharIntegerMap);
+        loader.loadingUniqueCharacters("abbabaaaba");
         verify(loader.cache, times(1)).put("abbabaaaba",expectedCharIntegerMap);
     }
 
